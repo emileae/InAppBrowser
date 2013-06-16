@@ -16,7 +16,9 @@ var knownfiles = [];
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
-    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www/html",{create:true},gotDir,onError);
+    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
+        appID.getDirectory('html', {create: true, exclusive: false}, gotDir, onError)
+    },onError);
 }
 
 //The directory entry callback
