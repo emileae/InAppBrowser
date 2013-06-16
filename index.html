@@ -40,7 +40,7 @@ function gotFiles(entries) {
 
 function renderPicture(path){
     $("#photos").append("<img src='file://"+path+"'>");
-    console.log("<img src='file://"+path+"'>");
+    alert("<img src='file://"+path+"'>");
 }
 
 function onError(e){
@@ -60,13 +60,13 @@ function appReady(){
             $("#status").html("Going to sync some images...");
             for (var i = 0; i < res.length; i++) {
                 if (knownfiles.indexOf(res[i]) == -1) {
-                    console.log("need to download " + res[i]);
+                    alert("need to download " + res[i]);
                     var ft = new FileTransfer();
                     var dlPath = DATADIR.fullPath + "/" + res[i];
-                    console.log("downloading crap to " + dlPath);
+                    alert("downloading crap to " + dlPath);
                     ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(){
                         renderPicture(dlPath);
-                        console.log("Successful download");
+                        alert("Successful download");
                     }, onError);
                 }
             }
