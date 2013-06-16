@@ -17,9 +17,27 @@ var knownfiles = [];
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
-        appID.getDirectory('html', {create: true, exclusive: false}, gotDir, onError)
+        appID.getDirectory('html', {create: true, exclusive: false}, gotFileEntry, onError)
     },onError);
 }
+
+//START From PhoneGap Docs FileReader
+function gotFileEntry(fileEntry) {
+        fileEntry.file(gotFile, onError);
+    } 
+function gotFile(file){
+        //readDataUrl(file);
+        readAsText(file);
+    }
+function readAsText(file) {
+        var reader = new FileReader();
+        reader.onloadend = function(evt) {
+            alert("Read as text");
+            alert(evt.target.result);
+        };
+        reader.readAsText(file);
+    }
+//END PhoneGap FileReader Docs
 
 //The directory entry callback
 function gotDir(d){
@@ -38,6 +56,7 @@ function gotFiles(entries) {
         alert(entries[i].name+' '+entries[i].isDirectory);
         //knownfiles.push(entries[i].name);
         //renderPicture(entries[i].fullPath);
+        
     }
 }
 
@@ -55,6 +74,11 @@ function onDeviceReady() {
     $("#status").html("Checking your local cache....");    
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null); 
 }
+
+//my function
+function load_html(){
+    
+};
 
 function appReady(){
     $("#status").html("Ready to check remote files...");
@@ -76,7 +100,6 @@ function appReady(){
         }
         $("#status").html("");
     }, "json");
-
 }
 
 function init() {
