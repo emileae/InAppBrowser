@@ -39,12 +39,19 @@ function onError(e){
 }
 
 function onDeviceReady() {
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);    
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null); 
+    window.resolveLocalFileSystemURI("content://DCIM/Camera/20130116_114656.jpg", win, fail);
 }
 
 function init() {
 document.addEventListener("deviceready", onDeviceReady, true);
 } 
+
+//my fn
+function win(data){
+    alert(data);
+};
+
 </script> 
 
 </head>
@@ -52,6 +59,8 @@ document.addEventListener("deviceready", onDeviceReady, true);
 <h2>Image Download Demo</h2>
 
 <div id="status"></div>
+
+<img src=""></img>
 
 </body>
 </html>
