@@ -1,64 +1,59 @@
-<!--<!DOCTYPE HTML>-->
+
+<!DOCTYPE HTML>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
-    <meta content='text/html;charset=UTF-8' http-equiv='content-type'><!-- this seems to be important for the 360 spritespin plugin -->
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    
-    <script src="jquery-1.7.2.min.js" type="text/javascript"></script>
-    <!--<script src="zeptomin.js"></script>-->
-    
-    
-    <script src="file_loading.js"></script><!-- loading external files like html files, should be placed before page dimensions are calculated -->
-    <!--<script src="dynamic_content.js"></script><!-- load dynamic content so place script after files are loaded but before styles and before iscroll and widgets are loaded -->
-    <script src="set_img_height.js"></script><!-- before iScroll sets page dimensions need the heights -->
-    <script src="dynamic_styles.js"></script><!-- changing scroller dimensions so should appear before iscroll initialization but after loading external files -->
-    
-    <!--<script src="set_height.js"></script><!-- ?? doesnt help-> ?setting before iscroll for height and rubber band effect -->
-    
-    <script src="iscroll4.js"></script>
-    <script src="spritespin.js" type="text/javascript"></script>
-    <script src="scroll.js"></script>
-    
-    <script src="form_submit.js"></script><!-- loaded after scroll.js since it disables myScroll which is defined in scroll.js -->
-    <script src="rotator.js"></script><!-- ensure that this is placed after iscroll and file loading -->
-    <script src="popup.js"></script>
-    <script src="table_of_contents.js"></script>
-    
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-    
-    <script type="text/javascript" charset="utf-8">
-    // Wait for Cordova to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
+<meta name="viewport" content="width=320; user-scalable=no" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>Image Download Demo</title>
 
-    // Cordova is ready
-    //
-    function onDeviceReady() {
-         var ref = window.open('http://apache.org', '_self', 'location=no');
-         ref.addEventListener('loadstart', function() { alert('start: ' + event.url); });
-         ref.addEventListener('loadstop', function() { alert('stop: ' + event.url); });
-         ref.addEventListener('exit', function() { alert(event.type); });
-    }
-    </script>
-    
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function(){
-            $('body').css('color', 'red');
-        });
-    </script>
-    
-    
-    
+<script src="jquery-1.7.2.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8">
+//Global instance of DirectoryEntry for our data
+var DATADIR;
+
+//Loaded my file system, now let's get a directory entry for where I'll store my crap    
+function onFSSuccess(fileSystem) {
+    fileSystem.root.getDirectory("Android/data/com.piheroes.imagedownloaddemo",{create:true},gotDir,onError);
+}
+
+//The directory entry callback
+function gotDir(d){
+    DATADIR = d;
+    var reader = DATADIR.createReader();
+    reader.readEntries(gotFiles,onError);
+}
+
+//Result of reading my directory
+function gotFiles(entries) {
+    alert("The dir has "+entries.length+" entries.");
+ for (var i=0; i<entries.length; i++) {
+ alert(entries[i].name+' '+entries[i].isDirectory);
+}
+}
+
+function onError(e){
+    alert("ERROR");
+    alert(JSON.stringify(e));
+}
+
+function onDeviceReady() {
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);    
+}
+
+function init() {
+document.addEventListener("deviceready", onDeviceReady, true);
+} 
+</script> 
+
 </head>
-<body>
+<body onload="init();" >
+<h2>Image Download Demo</h2>
 
-    <div class="frame">
-    <p>
-        Some Html
-    </p>
-    </div><!-- Frame -->
+<div id="status"></div>
 
 </body>
-
 </html>
+
+

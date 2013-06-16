@@ -18,7 +18,12 @@
     <preference name="orientation" value="portrait" />
     <preference name="phonegap-version" value="2.7.0" />
     
+    <!-- For inAppBrowser -->
     <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser" />
+    
+    <!--For file API -->
+    <plugin name="File" value="org.apache.cordova.FileUtils" />
+    <plugin name="FileTransfer" value="org.apache.cordova.FileTransfer" />
     
     <access origin="*" />
     
