@@ -15,7 +15,7 @@ var DATADIR;
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
-    fileSystem.root.getDirectory("Android/data/com.piheroes.imagedownloaddemo",{create:true},gotDir,onError);
+    fileSystem.root.getDirectory("Android/data/com.yelp.android",{create:true},gotDir,onError);
 }
 
 //The directory entry callback
@@ -40,17 +40,11 @@ function onError(e){
 
 function onDeviceReady() {
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null); 
-    window.resolveLocalFileSystemURI("content://DCIM/Camera/20130116_114656.jpg", win, fail);
 }
 
 function init() {
 document.addEventListener("deviceready", onDeviceReady, true);
 } 
-
-//my fn
-function win(data){
-    alert(data);
-};
 
 </script> 
 
