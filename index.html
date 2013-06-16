@@ -12,6 +12,7 @@
 <script type="text/javascript" charset="utf-8">
 //Global instance of DirectoryEntry for our data
 var DATADIR;
+var knownfiles = []; 
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
@@ -32,10 +33,10 @@ function gotDir(d){
 function gotFiles(entries) {
     alert("The dir has "+entries.length+" entries.");
  for (var i=0; i<entries.length; i++) {
- alert(entries[i].name+' '+entries[i].isDirectory);
+        alert(entries[i].name+' '+entries[i].isDirectory);
         knownfiles.push(entries[i].name);
         renderPicture(entries[i].fullPath);
-}
+    }
 }
 
 function renderPicture(path){
