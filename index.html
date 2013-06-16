@@ -26,8 +26,8 @@
     <script src="table_of_contents.js"></script>
     
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    
     <script type="text/javascript" charset="utf-8">
-
     // Wait for Cordova to load
     //
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -40,7 +40,12 @@
          ref.addEventListener('loadstop', function() { alert('stop: ' + event.url); });
          ref.addEventListener('exit', function() { alert(event.type); });
     }
-
+    </script>
+    
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            $('body').css('color', 'red');
+        });
     </script>
     
     
