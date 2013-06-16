@@ -65,9 +65,9 @@ function appReady(){
                     var ft = new FileTransfer();
                     var dlPath = DATADIR.fullPath + "/" + res[i];
                     alert("downloading crap to " + dlPath);
-                    ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(){
-                        renderPicture(dlPath);
-                        alert("Successful download");
+                    ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(e){
+                        renderPicture(e.fullPath);
+                        console.log("Successful download of "+e.fullPath);
                     }, onError);
                 }
             }
