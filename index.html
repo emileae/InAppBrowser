@@ -16,7 +16,7 @@ var knownfiles = [];
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
-    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true},gotDir,onError);
+    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www/html",{create:true},gotDir,onError);
 }
 
 //The directory entry callback
@@ -25,7 +25,7 @@ function gotDir(d){
     var reader = DATADIR.createReader();
     reader.readEntries(function(d){
         gotFiles(d);
-        appReady();
+        //appReady();
     },onError);
 }
 
@@ -34,8 +34,8 @@ function gotFiles(entries) {
     alert("The dir has "+entries.length+" entries.");
  for (var i=0; i<entries.length; i++) {
         alert(entries[i].name+' '+entries[i].isDirectory);
-        knownfiles.push(entries[i].name);
-        renderPicture(entries[i].fullPath);
+        //knownfiles.push(entries[i].name);
+        //renderPicture(entries[i].fullPath);
     }
 }
 
@@ -78,7 +78,7 @@ function appReady(){
 }
 
 function init() {
-document.addEventListener("deviceready", onDeviceReady, true);
+    document.addEventListener("deviceready", onDeviceReady, true);
 } 
 
 </script>
