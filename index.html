@@ -23,10 +23,12 @@ function onFSSuccess(fileSystem) {
 
 //START From PhoneGap Docs FileReader
 function gotFileEntry(fileEntry) {
+        alert('got file entry!');
         fileEntry.file(gotFile, onError);
     } 
 function gotFile(file){
         //readDataUrl(file);
+        alert('got file!');
         readAsText(file);
     }
 function readAsText(file) {
