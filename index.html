@@ -19,24 +19,31 @@ function onFSSuccess(fileSystem) {
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
         appID.getDirectory('html', {create: true, exclusive: false}, madeDir, onError)
     },onError);
-    
-    fileSystem.root.getFile("test_text.html", null, gotFileEntry, fail);
-    
 }
 
-function madeDir(){
-    alert('made Directory');
+function madeDir(d){
+    alert('found/made Directory');
+    DATADIR = d;
+    var reader = DATADIR.createReader();
+    reader.readEntries(function(d){
+        gotFileEntries(d);
+        //appReady();
+    },onError);
 };
 
 //START From PhoneGap Docs FileReader
-function gotFileEntry(fileEntry) {
-        if (fileEntry){
-            alert('got file entry!');
-        }else{
-            alert('no file entry')
+function gotFileEntries(fileEntries) {
+    alert("The dir has "+fileEntries.length+" entries.");
+    for (var i=0; i<fileEntries.length; i++) {
+        alert(fileEntries[i].name+' '+fileEntries[i].isDirectory);
+        //knownfiles.push(fileEntries[i].name);
+        //renderPicture(fileEntries[i].fullPath);
+        if(!fileEntries[i].isDirectory){
+            gotFile(fileEntries[i]);
         };
-        fileEntry.file(gotFile, onError);
-    } 
+    }
+        //fileEntries.file(gotFile, onError);
+};
 function gotFile(file){
         //readDataUrl(file);
         alert('got file!');
