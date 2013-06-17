@@ -127,12 +127,17 @@ function get_FS(){
 function file_read(fileSystem){
     alert('going to try to read file');
     //fileSystem.root.getFile("test_text.html", null, gotFileEntry, onError);
-    fileSystem.root.getFile("test.txt", {create: true}, gotFileEntry, onError);
+    fileSystem.root.getFile("test.txt", {create: true}, gotFileEntry_read, onError);
 };
 function gotFileEntry(fileEntry) {
         alert('gotFileEntry');
         alert('writing file');
         fileEntry.createWriter(gotFileWriter, onError);
+        fileEntry.file(gotFile, onError);
+    };
+function gotFileEntry_read(fileEntry) {
+        alert('going to read the newly written file');
+        //fileEntry.createWriter(gotFileWriter, onError);
         fileEntry.file(gotFile, onError);
     };
 
