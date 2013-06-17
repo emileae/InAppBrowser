@@ -24,6 +24,9 @@ function onFSSuccess(fileSystem) {
 function madeDir(d){
     alert('found/made Directory');
     DATADIR = d;
+    //trying to create a file in dir
+    DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
+    alert('?created file?');
     var reader = DATADIR.createReader();
     reader.readEntries(function(d){
         gotFileEntries(d);
