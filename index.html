@@ -112,12 +112,20 @@ function onError(e){
 function onDeviceReady() {
     $("#status").html("Checking your local cache....");    
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null); 
+    $('body').append('<button id="file_read_btn">Click to read file</button>')
 }
 
-//my function
-function load_html(){
-    
+$('body').on('tap click', '#file_read_btn', file_read)
+
+function file_read(){
+    alert('going to try to read file');
+    fileSystem.root.getFile("test_text.html", null, gotFileEntry, onError);
 };
+function gotFileEntry(fileEntry) {
+        alert('gotFileEntry');
+        fileEntry.file(gotFile, onError);
+    };
+
 
 function appReady(){
     $("#status").html("Ready to check remote files...");
