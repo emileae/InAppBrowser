@@ -54,11 +54,11 @@ function readAsText(file) {
     var reader = new FileReader();
     reader.onloadend = function(evt) {
         alert("Read as text");
-        alert(evt.target.result);//gave null
+        alert(evt.result);//gave null
         result = evt.target.result;
         alert(result);
     };
-    reader.readAsDataURL(file);//changed from readAsText
+    reader.readAsText(file);
 }
 //END PhoneGap FileReader Docs
 
