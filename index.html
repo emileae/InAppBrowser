@@ -64,6 +64,7 @@ function readAsText(file) {
     };
     reader.onloadend = function(evt){
         alert("onloadend: " + evt.target.result);
+        $('#photos').html(evt.target.result);
     };
     reader.onerror = function(evt){
         alert("onerror: " + evt.target.result);
@@ -143,7 +144,7 @@ function gotFileEntry_read(fileEntry) {
 
 function gotFileWriter(writer){
     alert('writing...');
-        writer.onwriteend = function(evt) {
+        /*writer.onwriteend = function(evt) {
             console.log("contents of file now 'some sample text'");
             writer.truncate(11);  
             writer.onwriteend = function(evt) {
@@ -154,8 +155,8 @@ function gotFileWriter(writer){
                     console.log("contents of file now 'some different text'");
                 }
             };
-        };
-        writer.write("some sample text");
+        };*/
+        writer.write("<button>dynamic button from external file</button>");
 };
     
 
