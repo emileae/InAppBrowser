@@ -123,7 +123,8 @@ function get_FS(){
 
 function file_read(fileSystem){
     alert('going to try to read file');
-    fileSystem.root.getFile("test_text.html", null, gotFileEntry, onError);
+    //fileSystem.root.getFile("test_text.html", null, gotFileEntry, onError);
+    fileSystem.root.getFile("test.txt", {create: true}, gotFileEntry, onError);
 };
 function gotFileEntry(fileEntry) {
         alert('gotFileEntry');
