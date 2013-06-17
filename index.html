@@ -52,12 +52,27 @@ function gotFile(file){
 function readAsText(file) {
     var result;
     var reader = new FileReader();
-    reader.onloadend = function(evt) {
+    
+    reader.onloadstart = function(evt){
+        alert("onloadstart: " + evt.target.result);
+    };
+    reader.onload = function(evt){
+        alert("onload: " + evt.target.result);
+    };
+    reader.onloadend = function(evt){
+        alert("onloadend: " + evt.target.result);
+    };
+    reader.onerror = function(evt){
+        alert("onerror: " + evt.target.result);
+    };
+    
+    
+    /*reader.onloadend = function(evt) {
         alert("Read as text");
-        alert(evt.result);//gave null
+        alert(evt.target.result);
         result = evt.target.result;
         alert(result);
-    };
+    };*/
     reader.readAsText(file);
 }
 //END PhoneGap FileReader Docs
