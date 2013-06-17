@@ -17,13 +17,24 @@ var knownfiles = [];
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
-        appID.getDirectory('html', {create: true, exclusive: false}, gotFileEntry, onError)
+        appID.getDirectory('html', {create: true, exclusive: false}, madeDir, onError)
     },onError);
+    
+    fileSystem.root.getFile("test_text.html", null, gotFileEntry, fail);
+    
 }
+
+function madeDir(){
+    alert('made Directory');
+};
 
 //START From PhoneGap Docs FileReader
 function gotFileEntry(fileEntry) {
-        alert('got file entry!');
+        if (fileEntry){
+            alert('got file entry!');
+        }else{
+            alert('no file entry')
+        };
         fileEntry.file(gotFile, onError);
     } 
 function gotFile(file){
