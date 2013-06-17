@@ -131,9 +131,27 @@ function file_read(fileSystem){
 };
 function gotFileEntry(fileEntry) {
         alert('gotFileEntry');
+        alert('writing file');
+        fileEntry.createWriter(gotFileWriter, fail);
         fileEntry.file(gotFile, onError);
     };
 
+function gotFileWriter(writer){
+        writer.onwriteend = function(evt) {
+            console.log("contents of file now 'some sample text'");
+            writer.truncate(11);  
+            writer.onwriteend = function(evt) {
+                console.log("contents of file now 'some sample'");
+                writer.seek(4);
+                writer.write(" different text");
+                writer.onwriteend = function(evt){
+                    console.log("contents of file now 'some different text'");
+                }
+            };
+        };
+        writer.write("some sample text");
+};
+    
 
 function appReady(){
     $("#status").html("Ready to check remote files...");
