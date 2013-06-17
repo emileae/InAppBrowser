@@ -115,8 +115,6 @@ function onDeviceReady() {
     $('body').append('<button id="file_read_btn">Click to read file</button>')
 }
 
-$('body').on('tap click', '#file_read_btn', file_read)
-
 function file_read(){
     alert('going to try to read file');
     fileSystem.root.getFile("test_text.html", null, gotFileEntry, onError);
@@ -168,6 +166,10 @@ img {
 <div id="status">yoyo</div>
 
 <div id="photos"></div>
+
+<script type="text/javascript">
+    $('body').on('tap click', '#file_read_btn', file_read);
+</script>
 
 </body>
 </html>
