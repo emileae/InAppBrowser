@@ -132,11 +132,12 @@ function file_read(fileSystem){
 function gotFileEntry(fileEntry) {
         alert('gotFileEntry');
         alert('writing file');
-        fileEntry.createWriter(gotFileWriter, fail);
+        fileEntry.createWriter(gotFileWriter, onError);
         fileEntry.file(gotFile, onError);
     };
 
 function gotFileWriter(writer){
+    alert('writing...');
         writer.onwriteend = function(evt) {
             console.log("contents of file now 'some sample text'");
             writer.truncate(11);  
