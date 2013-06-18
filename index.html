@@ -16,7 +16,8 @@ var knownfiles = [];
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem, filename) {
-    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
+    alert('find or create Directory');
+    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID, filename){
         appID.getDirectory('html', {create: true, exclusive: false}, function(){madeDir(d, filename)}, onError)
     },onError);
 }
@@ -28,7 +29,7 @@ function madeDir(d, filename){
     //DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
     //alert('?created file?');
     var reader = DATADIR.createReader();
-    reader.readEntries(function(d){
+    reader.readEntries(function(d, filename){
         alert('done with dirs');
         gotFileEntries(d, filename);
         //appReady();
@@ -44,8 +45,8 @@ function gotFileEntries(fileEntries, filename) {
         renderPicture(fileEntries[indx]);
         alert('already downloaded');
     }else{
+        alert('not downloaded... downloading');
         appReady_btn(filename);
-        alert('not downloaded... downloading')
     }
     
     /*for (var i=0; i<fileEntries.length; i++) {
@@ -122,83 +123,14 @@ function onDeviceReady() {
 }
 
 function download_handler(filename){
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (){
+    alert('req file sys');
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(){
         onFSSuccess(fileSystem, filename);
     }, null);
 };
 
 
 /*START Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
-//The directory entry callback
-function gotDir(d){
-    DATADIR = d;
-    var reader = DATADIR.createReader();
-    reader.readEntries(function(d){
-        gotFiles(d);
-        //appReady();
-    },onError);
-}
-
-function gotFile(file){
-        //readDataUrl(file);
-        alert('got file!');
-        readAsText(file);
-    }
-function readAsText(file) {
-    var result;
-    var reader = new FileReader();
-    
-    reader.onloadstart = function(evt){
-        alert("onloadstart: " + evt.target.result);
-    };
-    reader.onload = function(evt){
-        alert("onload: " + evt.target.result);
-    };
-    reader.onloadend = function(evt){
-        alert("onloadend: " + evt.target.result);
-        $('#photos').html(evt.target.result);
-    };
-    reader.onerror = function(evt){
-        alert("onerror: " + evt.target.result);
-    };
-
-    /*reader.onloadend = function(evt) {
-        alert("Read as text");
-        alert(evt.target.result);
-        result = evt.target.result;
-        alert(result);
-    };*/
-    reader.readAsText(file);
-}
-
-function get_FS(){
-    alert('getting File System');
-    //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, file_read, null);
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, file_read, onError);
-};
-
-function file_read(fileSystem){
-    alert('going to try to read file');
-    //fileSystem.root.getFile("test_text.html", null, gotFileEntry, onError);
-    fileSystem.root.getFile("test.txt", {create: true}, gotFileEntry_read, onError);
-};
-function gotFileEntry(fileEntry) {
-        alert('gotFileEntry');
-        alert('writing file');
-        fileEntry.createWriter(gotFileWriter, onError);
-        fileEntry.file(gotFile, onError);
-    };
-function gotFileEntry_read(fileEntry) {
-        alert('going to read the newly written file');
-        //fileEntry.createWriter(gotFileWriter, onError);
-        fileEntry.file(gotFile, onError);
-    };
-
-function gotFileWriter(writer){
-    alert('writing...');      
-        writer.write("<button>dynamic button from external file</button>");
-};
 /*END Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 function init() {
@@ -227,6 +159,7 @@ img {
 <script type="text/javascript">
     //$('body').on('tap click', '#file_read_btn', get_FS);
     $('body').on('tap click', '#download_cfguy', function(){
+        alert('clicked btn');
         download_handler('cfguy.png');
     });
 </script>
