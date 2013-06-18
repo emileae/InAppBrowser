@@ -15,13 +15,13 @@ var DATADIR;
 var knownfiles = []; 
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
-function onFSSuccess(fileSystem) {
+function onFSSuccess(fileSystem, filename) {
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
-        appID.getDirectory('html', {create: true, exclusive: false}, madeDir, onError)
+        appID.getDirectory('html', {create: true, exclusive: false}, function(){madeDir(d, filename)}, onError)
     },onError);
 }
 
-function madeDir(d){
+function madeDir(d, filename){
     alert('found/made Directory');
     DATADIR = d;
     //trying to create a file in dir
@@ -30,22 +30,32 @@ function madeDir(d){
     var reader = DATADIR.createReader();
     reader.readEntries(function(d){
         alert('done with dirs');
-        //gotFileEntries(d);
+        gotFileEntries(d, filename);
         //appReady();
     },onError);
 };
 
 
-function gotFileEntries(fileEntries) {
+function gotFileEntries(fileEntries, filename) {
     alert("The dir has "+fileEntries.length+" entries.");
-    for (var i=0; i<fileEntries.length; i++) {
+    
+    if ($.inArray(filename, fileEntries) > -1){
+        var indx = $.inArray(filename, fileEntries);
+        renderPicture(fileEntries[indx]);
+        alert('already downloaded');
+    }else{
+        appReady_btn(filename);
+        alert('not downloaded... downloading')
+    }
+    
+    /*for (var i=0; i<fileEntries.length; i++) {
         alert(fileEntries[i].name+' '+fileEntries[i].isDirectory);
-        knownfiles.push(fileEntries[i].name);
-        renderPicture(fileEntries[i].fullPath);
+        //knownfiles.push(fileEntries[i].name);
+        //renderPicture(fileEntries[i].fullPath);
         //if(!fileEntries[i].isDirectory){
         //    gotFile(fileEntries[i]);
         //};
-    }
+    }*/
         //fileEntries.file(gotFile, onError);
 };
 
@@ -107,9 +117,15 @@ function onError(e){
 
 function onDeviceReady() {
     //$("#status").html("Checking your local cache....");    
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
-    //$('body').append('<button id="file_read_btn">Click to read file</button>')
+    //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
+    $('body').append('<button id="download_cfguy">Download File "cfguy.png"</button>')
 }
+
+function download_handler(filename){
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (){
+        onFSSuccess(fileSystem, filename);
+    }, null);
+};
 
 
 /*START Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -206,12 +222,12 @@ img {
 <div id="photos"></div>
 <br>
 <br>
-<button id="download_cfguy">Download File "cfguy.png"</button>
+<!--<button id="download_cfguy">Download File "cfguy.png"</button>-->
 
 <script type="text/javascript">
     //$('body').on('tap click', '#file_read_btn', get_FS);
     $('body').on('tap click', '#download_cfguy', function(){
-        appReady_btn('cfguy.png');
+        download_handler('cfguy.png');
     });
 </script>
 
