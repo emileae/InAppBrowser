@@ -13,31 +13,32 @@
 //Global instance of DirectoryEntry for our data
 var DATADIR;
 var knownfiles = []; 
+var filename = "";
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
-function onFSSuccess(fileSystem, filename) {
+function onFSSuccess(fileSystem) {
     alert('find or create Directory'+'-'+filename);
-    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID, filename){
-        appID.getDirectory('html', {create: true, exclusive: false}, function(d, filename){madeDir(d, filename)}, onError)
+    fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
+        appID.getDirectory('html', {create: true, exclusive: false}, madeDir, onError)
     },onError);
 }
 
-function madeDir(d, filename){
+function madeDir(d){
     alert('found/made Directory'+'-'+filename);
     DATADIR = d;
     //trying to create a file in dir
     //DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
     //alert('?created file?');
     var reader = DATADIR.createReader();
-    reader.readEntries(function(d, filename){
+    reader.readEntries(function(d){
         alert('done with dirs'+'-'+filename);
-        gotFileEntries(d, filename);
+        gotFileEntries(d);
         //appReady();
     },onError);
 };
 
 
-function gotFileEntries(fileEntries, filename) {
+function gotFileEntries(fileEntries) {
     alert("The dir has "+fileEntries.length+" entries."+'-'+filename);
     
     if ($.inArray(filename, fileEntries) > -1){
@@ -122,12 +123,10 @@ function onDeviceReady() {
     $('body').append('<button id="download_cfguy">Download File "cfguy.png"</button>')
 }
 
-function download_handler(filename){
+function download_handler(file_name){
+    filename = file_name;
     alert('req file sys'+'-'+filename);
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem, filename){
-        alert('in 1st callback'+'-'+filename);
-        onFSSuccess(fileSystem, filename);
-    }, null);
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
 };
 
 
