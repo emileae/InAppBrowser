@@ -16,21 +16,21 @@ var knownfiles = [];
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem, filename) {
-    alert('find or create Directory');
+    alert('find or create Directory'+'-'+filename);
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID, filename){
         appID.getDirectory('html', {create: true, exclusive: false}, function(d, filename){madeDir(d, filename)}, onError)
     },onError);
 }
 
 function madeDir(d, filename){
-    alert('found/made Directory');
+    alert('found/made Directory'+'-'+filename);
     DATADIR = d;
     //trying to create a file in dir
     //DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
     //alert('?created file?');
     var reader = DATADIR.createReader();
     reader.readEntries(function(d, filename){
-        alert('done with dirs');
+        alert('done with dirs'+'-'+filename);
         gotFileEntries(d, filename);
         //appReady();
     },onError);
@@ -38,14 +38,14 @@ function madeDir(d, filename){
 
 
 function gotFileEntries(fileEntries, filename) {
-    alert("The dir has "+fileEntries.length+" entries.");
+    alert("The dir has "+fileEntries.length+" entries."+'-'+filename);
     
     if ($.inArray(filename, fileEntries) > -1){
         var indx = $.inArray(filename, fileEntries);
         renderPicture(fileEntries[indx]);
-        alert('already downloaded');
+        alert('already downloaded'+'-'+filename);
     }else{
-        alert('not downloaded... downloading');
+        alert('not downloaded... downloading'+'-'+filename);
         appReady_btn(filename);
     }
     
@@ -123,9 +123,9 @@ function onDeviceReady() {
 }
 
 function download_handler(filename){
-    alert('req file sys');
+    alert('req file sys'+'-'+filename);
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem, filename){
-        alert('in 1st callback');
+        alert('in 1st callback'+'-'+filename);
         onFSSuccess(fileSystem, filename);
     }, null);
 };
