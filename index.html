@@ -18,7 +18,7 @@ var knownfiles = [];
 function onFSSuccess(fileSystem, filename) {
     alert('find or create Directory');
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID, filename){
-        appID.getDirectory('html', {create: true, exclusive: false}, function(){madeDir(d, filename)}, onError)
+        appID.getDirectory('html', {create: true, exclusive: false}, function(d, filename){madeDir(d, filename)}, onError)
     },onError);
 }
 
@@ -124,7 +124,8 @@ function onDeviceReady() {
 
 function download_handler(filename){
     alert('req file sys');
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(){
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem, filename){
+        alert('in 1st callback');
         onFSSuccess(fileSystem, filename);
     }, null);
 };
