@@ -25,71 +25,63 @@ function madeDir(d){
     alert('found/made Directory');
     DATADIR = d;
     //trying to create a file in dir
-    DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
-    alert('?created file?');
+    //DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
+    //alert('?created file?');
     var reader = DATADIR.createReader();
     reader.readEntries(function(d){
-        gotFileEntries(d);
+        alert('done with dirs');
+        //gotFileEntries(d);
         //appReady();
     },onError);
 };
 
-//START From PhoneGap Docs FileReader
+
 function gotFileEntries(fileEntries) {
     alert("The dir has "+fileEntries.length+" entries.");
     for (var i=0; i<fileEntries.length; i++) {
         alert(fileEntries[i].name+' '+fileEntries[i].isDirectory);
-        //knownfiles.push(fileEntries[i].name);
-        //renderPicture(fileEntries[i].fullPath);
-        if(!fileEntries[i].isDirectory){
-            gotFile(fileEntries[i]);
-        };
+        knownfiles.push(fileEntries[i].name);
+        renderPicture(fileEntries[i].fullPath);
+        //if(!fileEntries[i].isDirectory){
+        //    gotFile(fileEntries[i]);
+        //};
     }
         //fileEntries.file(gotFile, onError);
 };
-function gotFile(file){
-        //readDataUrl(file);
-        alert('got file!');
-        readAsText(file);
-    }
-function readAsText(file) {
-    var result;
-    var reader = new FileReader();
-    
-    reader.onloadstart = function(evt){
-        alert("onloadstart: " + evt.target.result);
-    };
-    reader.onload = function(evt){
-        alert("onload: " + evt.target.result);
-    };
-    reader.onloadend = function(evt){
-        alert("onloadend: " + evt.target.result);
-        $('#photos').html(evt.target.result);
-    };
-    reader.onerror = function(evt){
-        alert("onerror: " + evt.target.result);
-    };
-    
-    
-    /*reader.onloadend = function(evt) {
-        alert("Read as text");
-        alert(evt.target.result);
-        result = evt.target.result;
-        alert(result);
-    };*/
-    reader.readAsText(file);
-}
-//END PhoneGap FileReader Docs
 
-//The directory entry callback
-function gotDir(d){
-    DATADIR = d;
-    var reader = DATADIR.createReader();
-    reader.readEntries(function(d){
-        gotFiles(d);
-        //appReady();
-    },onError);
+function appReady(){
+    $("#status").html("Ready to check remote files...");
+    $.get("http://www.raymondcamden.com/demos/2012/jan/17/imagelister.cfc?method=listimages", {}, function(res) {
+    //function(data){returns list of files to download}
+        if (res.length > 0) {
+            $("#status").html("Going to sync some images...");
+            for (var i = 0; i < res.length; i++) {
+                if (knownfiles.indexOf(res[i]) == -1) {
+                    alert("need to download " + res[i]);
+                    var ft = new FileTransfer();
+                    var dlPath = DATADIR.fullPath + "/" + res[i];
+                    alert("downloading crap to " + dlPath);
+                    ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(e){
+                        renderPicture(e.fullPath);
+                        console.log("Successful download of "+e.fullPath);
+                    }, onError);
+                }
+            }
+        }
+        $("#status").html("");
+    }, "json");
 }
+
+function appReady_btn(file_name){
+    $("#status").html("downloading "+file_name+" file");
+    var ft = new FileTransfer();
+    var dlPath = DATADIR.fullPath + "/" + file_name;
+    ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(file_name), dlPath, function(e){
+        renderPicture(e.fullPath);
+        alert("Successful download of "+e.fullPath);
+    }, onError);
+    
+};
 
 //Result of reading my directory
 function gotFiles(entries) {
@@ -114,9 +106,54 @@ function onError(e){
 }
 
 function onDeviceReady() {
-    $("#status").html("Checking your local cache....");    
+    //$("#status").html("Checking your local cache....");    
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
-    $('body').append('<button id="file_read_btn">Click to read file</button>')
+    //$('body').append('<button id="file_read_btn">Click to read file</button>')
+}
+
+
+/*START Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+//The directory entry callback
+function gotDir(d){
+    DATADIR = d;
+    var reader = DATADIR.createReader();
+    reader.readEntries(function(d){
+        gotFiles(d);
+        //appReady();
+    },onError);
+}
+
+function gotFile(file){
+        //readDataUrl(file);
+        alert('got file!');
+        readAsText(file);
+    }
+function readAsText(file) {
+    var result;
+    var reader = new FileReader();
+    
+    reader.onloadstart = function(evt){
+        alert("onloadstart: " + evt.target.result);
+    };
+    reader.onload = function(evt){
+        alert("onload: " + evt.target.result);
+    };
+    reader.onloadend = function(evt){
+        alert("onloadend: " + evt.target.result);
+        $('#photos').html(evt.target.result);
+    };
+    reader.onerror = function(evt){
+        alert("onerror: " + evt.target.result);
+    };
+
+    /*reader.onloadend = function(evt) {
+        alert("Read as text");
+        alert(evt.target.result);
+        result = evt.target.result;
+        alert(result);
+    };*/
+    reader.readAsText(file);
 }
 
 function get_FS(){
@@ -143,33 +180,10 @@ function gotFileEntry_read(fileEntry) {
     };
 
 function gotFileWriter(writer){
-    alert('writing...');
-        
+    alert('writing...');      
         writer.write("<button>dynamic button from external file</button>");
 };
-    
-
-function appReady(){
-    $("#status").html("Ready to check remote files...");
-    $.get("http://www.raymondcamden.com/demos/2012/jan/17/imagelister.cfc?method=listimages", {}, function(res) {
-        if (res.length > 0) {
-            $("#status").html("Going to sync some images...");
-            for (var i = 0; i < res.length; i++) {
-                if (knownfiles.indexOf(res[i]) == -1) {
-                    alert("need to download " + res[i]);
-                    var ft = new FileTransfer();
-                    var dlPath = DATADIR.fullPath + "/" + res[i];
-                    alert("downloading crap to " + dlPath);
-                    ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(e){
-                        renderPicture(e.fullPath);
-                        console.log("Successful download of "+e.fullPath);
-                    }, onError);
-                }
-            }
-        }
-        $("#status").html("");
-    }, "json");
-}
+/*END Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 function init() {
     document.addEventListener("deviceready", onDeviceReady, true);
@@ -190,9 +204,15 @@ img {
 <div id="status">yoyo</div>
 
 <div id="photos"></div>
+<br>
+<br>
+<button id="download_cfguy">Download File "cfguy.png"</button>
 
 <script type="text/javascript">
-    $('body').on('tap click', '#file_read_btn', get_FS);
+    //$('body').on('tap click', '#file_read_btn', get_FS);
+    $('body').on('tap click', '#download_cfguy', function(){
+        appReady_btn('cfguy.png');
+    });
 </script>
 
 </body>
