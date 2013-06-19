@@ -37,7 +37,6 @@ function madeDir(d){
     },onError);
 };
 
-
 function gotFileEntries(fileEntries) {
     alert("The dir has "+fileEntries.length+" entries."+'-'+filename);
     /*var indx = $.inArray(filename, fileEntries);//doesnt work because not iterating through fileEntries.name
@@ -103,8 +102,9 @@ function appReady_btn(file_name){
     var ft = new FileTransfer();
     var dlPath = DATADIR.fullPath + "/" + file_name;
     ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(file_name), dlPath, function(e){
-        renderPicture(e.fullPath);
-        alert("Successful download of "+e.fullPath);
+        //renderPicture(e.fullPath);
+        renderPicture(dlPath);
+        alert("Successful download of "+dlPath);
     }, onError);
     
 };
