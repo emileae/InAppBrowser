@@ -40,13 +40,12 @@ function madeDir(d){
 
 function gotFileEntries(fileEntries) {
     alert("The dir has "+fileEntries.length+" entries."+'-'+filename);
-    
-    if ($.inArray(filename, fileEntries) > -1){
-        var indx = $.inArray(filename, fileEntries);
+    var indx = $.inArray(filename, fileEntries);
+    if (indx > -1){
         renderPicture(fileEntries[indx]);
-        alert('already downloaded'+'-'+filename+'--'+$.inArray(filename, fileEntries);
+        alert('already downloaded'+'-'+filename+'--'+indx);
     }else{
-        alert('not downloaded... downloading'+'-'+filename+'--'+$.inArray(filename, fileEntries);
+        alert('not downloaded... downloading'+'-'+filename+'--'+indx);
         appReady_btn(filename);
     }
     
