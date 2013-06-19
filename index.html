@@ -44,9 +44,9 @@ function gotFileEntries(fileEntries) {
     if ($.inArray(filename, fileEntries) > -1){
         var indx = $.inArray(filename, fileEntries);
         renderPicture(fileEntries[indx]);
-        alert('already downloaded'+'-'+filename);
+        alert('already downloaded'+'-'+filename+'--'+$.inArray(filename, fileEntries);
     }else{
-        alert('not downloaded... downloading'+'-'+filename);
+        alert('not downloaded... downloading'+'-'+filename+'--'+$.inArray(filename, fileEntries);
         appReady_btn(filename);
     }
     
