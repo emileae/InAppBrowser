@@ -14,12 +14,13 @@
 var DATADIR;
 var knownfiles = []; 
 var filename = "";
+var foldername = ""
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
     alert('find or create Directory'+'-'+filename);
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
-        appID.getDirectory('html', {create: true, exclusive: false}, madeDir, onError)
+        appID.getDirectory(foldername, {create: true, exclusive: false}, madeDir, onError)
     },onError);
 }
 
@@ -47,14 +48,14 @@ function gotFileEntries(fileEntries) {
         alert('not downloaded... downloading'+'-'+filename+'--'+indx);
         appReady_btn(filename);
     };*/
-    
+
     var file_in_dir = false;
     for (var i=0; i<fileEntries.length; i++) {
         if (fileEntries[i].name == filename){
             file_in_dir=true;
         };
     };
-    
+
     if (file_in_dir){
         var dlPath = DATADIR.fullPath + "/" + filename;
         renderPicture(dlPath);
@@ -63,7 +64,7 @@ function gotFileEntries(fileEntries) {
         alert('not downloaded... downloading'+'-'+filename);
         appReady_btn(filename);
     };
-    
+
     /*for (var i=0; i<fileEntries.length; i++) {
         alert(fileEntries[i].name+' '+fileEntries[i].isDirectory);
         //knownfiles.push(fileEntries[i].name);
@@ -135,11 +136,13 @@ function onError(e){
 function onDeviceReady() {
     //$("#status").html("Checking your local cache....");    
     //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
-    $('body').append('<button id="download_cfguy">Download File "cfguy.png"</button>')
+    $('body').append('<button id="download_cfguy">Download File "cfguy.png"</button><br><br>');
+    $('body').append('<button id="download_bobapony">Download File "bobapony.jpg"</button>');
 }
 
-function download_handler(file_name){
+function download_handler(file_name, folder_name){
     filename = file_name;
+    foldername = folder_name;
     alert('req file sys'+'-'+filename);
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
 };
@@ -174,8 +177,10 @@ img {
 <script type="text/javascript">
     //$('body').on('tap click', '#file_read_btn', get_FS);
     $('body').on('tap click', '#download_cfguy', function(){
-        alert('clicked btn');
-        download_handler('cfguy.png');
+        download_handler('cfguy.png', 'folder1');
+    });
+    $('body').on('tap click', '#download_bobapony', function(){
+        download_handler('bobapony.jpg', 'folder2');
     });
 </script>
 
