@@ -56,7 +56,8 @@ function gotFileEntries(fileEntries) {
     };
     
     if (file_in_dir){
-        renderPicture(filename);
+        var dlPath = DATADIR.fullPath + "/" + file_name;
+        renderPicture(dlPath);
         alert('already downloaded'+'-'+filename);
     }else{
         alert('not downloaded... downloading'+'-'+filename);
