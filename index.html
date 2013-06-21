@@ -27,30 +27,16 @@ function onFSSuccess(fileSystem) {
 function madeDir(d){
     alert('found/made Directory'+'-'+foldername);
     DATADIR = d;
-    //trying to create a file in dir
-    //DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
-    //alert('?created file?');
     var reader = DATADIR.createReader();
     reader.readEntries(function(d){
         alert('done with dirs'+'-'+foldername);
         gotFileEntries(d);
-        //appReady();
     },onError);
 };
 
 function gotFileEntries(fileEntries) {
     alert("The dir has "+fileEntries.length+" entries."+'-'+foldername);
-    /*var indx = $.inArray(filename, fileEntries);//doesnt work because not iterating through fileEntries.name
-    if (indx > -1){
-        renderPicture(fileEntries[indx]);
-        alert('already downloaded'+'-'+filename+'--'+indx);
-    }else{
-        alert('not downloaded... downloading'+'-'+filename+'--'+indx);
-        appReady_btn(filename);
-    };*/
 
-    
-    
     var file_in_dir = false;
     
     if(fileEntries.length>0){
@@ -65,74 +51,7 @@ function gotFileEntries(fileEntries) {
         render_issue(foldername);
     };
     
-    /*
-    for (var i=0; i<fileEntries.length; i++) {
-        if (fileEntries[i].name == filename){
-            file_in_dir=true;
-        };
-    };
-
-    if (file_in_dir){
-        var dlPath = DATADIR.fullPath + "/" + filename;
-        renderPicture(dlPath);
-        alert('already downloaded'+'-'+filename);
-    }else{
-        alert('not downloaded... downloading'+'-'+filename);
-        appReady_btn(filename);
-    };
-    */
 };
-
-function appReady(){
-    $("#status").html("Ready to check remote files...");
-    $.get("http://www.raymondcamden.com/demos/2012/jan/17/imagelister.cfc?method=listimages", {}, function(res) {
-    //function(data){returns list of files to download}
-        if (res.length > 0) {
-            $("#status").html("Going to sync some images...");
-            for (var i = 0; i < res.length; i++) {
-                if (knownfiles.indexOf(res[i]) == -1) {
-                    alert("need to download " + res[i]);
-                    var ft = new FileTransfer();
-                    var dlPath = DATADIR.fullPath + "/" + res[i];
-                    alert("downloading crap to " + dlPath);
-                    ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(e){
-                        renderPicture(e.fullPath);
-                        console.log("Successful download of "+e.fullPath);
-                    }, onError);
-                }
-            }
-        }
-        $("#status").html("");
-    }, "json");
-}
-
-function appReady_btn(file_name){
-    $("#status").html("downloading "+file_name+" file");
-    var ft = new FileTransfer();
-    var dlPath = DATADIR.fullPath + "/" + file_name;
-    ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(file_name), dlPath, function(e){
-        //renderPicture(e.fullPath);
-        renderPicture(dlPath);
-        alert("Successful download of "+dlPath);
-    }, onError);
-    
-};
-
-//Result of reading my directory
-function gotFiles(entries) {
-    alert("The dir has "+entries.length+" entries.");
- for (var i=0; i<entries.length; i++) {
-        alert(entries[i].name+' '+entries[i].isDirectory);
-        //knownfiles.push(entries[i].name);
-        //renderPicture(entries[i].fullPath);
-        
-    }
-}
-
-function renderPicture(path){
-    $("#photos").append("<img src='file://"+path+"'>");
-    alert("<img src='file://"+path+"'>");
-}
 
 function onError(e){
     alert("ERROR");
@@ -141,20 +60,9 @@ function onError(e){
 }
 
 function onDeviceReady() {
-    //$("#status").html("Checking your local cache....");    
-    //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
-    //$('body').append('<button id="download_cfguy">Download File "cfguy.png"</button><br><br>');
-    //$('body').append('<button id="download_bobapony">Download File "bobapony.jpg"</button>');
     $('body').append('download Issue: <button id="download_issue">1</button>');
 }
-/*
-function download_handler(file_name, folder_name){
-    filename = file_name;
-    foldername = folder_name;
-    alert('req file sys'+'-'+filename);
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
-};
-*/
+
 function download_handler(issue){
     foldername = issue;
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
@@ -171,6 +79,7 @@ function download_issue_files(issue){
                 alert("downloading crap to " + dlPath);
                 ft.download("http://eaeissues.appspot.com/getfile/" + data[key], dlPath, function(e){
                 render_issue(foldername);
+                })
             }
         }
     }, "json");
