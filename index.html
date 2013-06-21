@@ -18,28 +18,28 @@ var foldername = ""
 
 //Loaded my file system, now let's get a directory entry for where I'll store my crap    
 function onFSSuccess(fileSystem) {
-    alert('find or create Directory'+'-'+filename);
+    alert('find or create Directory'+'-'+foldername);
     fileSystem.root.getDirectory("Android/data/iab.com.scknss.www",{create:true, exclusive: false}, function(appID){
         appID.getDirectory(foldername, {create: true, exclusive: false}, madeDir, onError)
     },onError);
 }
 
 function madeDir(d){
-    alert('found/made Directory'+'-'+filename);
+    alert('found/made Directory'+'-'+foldername);
     DATADIR = d;
     //trying to create a file in dir
     //DATADIR.getFile("test.txt", {create: true}, gotFileEntry, onError);
     //alert('?created file?');
     var reader = DATADIR.createReader();
     reader.readEntries(function(d){
-        alert('done with dirs'+'-'+filename);
+        alert('done with dirs'+'-'+foldername);
         gotFileEntries(d);
         //appReady();
     },onError);
 };
 
 function gotFileEntries(fileEntries) {
-    alert("The dir has "+fileEntries.length+" entries."+'-'+filename);
+    alert("The dir has "+fileEntries.length+" entries."+'-'+foldername);
     /*var indx = $.inArray(filename, fileEntries);//doesnt work because not iterating through fileEntries.name
     if (indx > -1){
         renderPicture(fileEntries[indx]);
@@ -49,7 +49,23 @@ function gotFileEntries(fileEntries) {
         appReady_btn(filename);
     };*/
 
+    
+    
     var file_in_dir = false;
+    
+    if(fileEntries.length>0){
+        file_in_dir = true;
+    }else if (fileEntries.length<=0){
+        file_in_dir = false;
+    };
+    
+    if (!file_in_dir){
+        download_issue_files(foldername)
+    }else{
+        render_issue(foldername);
+    };
+    
+    /*
     for (var i=0; i<fileEntries.length; i++) {
         if (fileEntries[i].name == filename){
             file_in_dir=true;
@@ -64,16 +80,7 @@ function gotFileEntries(fileEntries) {
         alert('not downloaded... downloading'+'-'+filename);
         appReady_btn(filename);
     };
-
-    /*for (var i=0; i<fileEntries.length; i++) {
-        alert(fileEntries[i].name+' '+fileEntries[i].isDirectory);
-        //knownfiles.push(fileEntries[i].name);
-        //renderPicture(fileEntries[i].fullPath);
-        //if(!fileEntries[i].isDirectory){
-        //    gotFile(fileEntries[i]);
-        //};
-    }*/
-        //fileEntries.file(gotFile, onError);
+    */
 };
 
 function appReady(){
@@ -136,17 +143,42 @@ function onError(e){
 function onDeviceReady() {
     //$("#status").html("Checking your local cache....");    
     //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
-    $('body').append('<button id="download_cfguy">Download File "cfguy.png"</button><br><br>');
-    $('body').append('<button id="download_bobapony">Download File "bobapony.jpg"</button>');
+    //$('body').append('<button id="download_cfguy">Download File "cfguy.png"</button><br><br>');
+    //$('body').append('<button id="download_bobapony">Download File "bobapony.jpg"</button>');
+    $('body').append('download Issue: <button id="download_issue">1</button>');
 }
-
+/*
 function download_handler(file_name, folder_name){
     filename = file_name;
     foldername = folder_name;
     alert('req file sys'+'-'+filename);
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
 };
+*/
+function download_handler(issue){
+    foldername = issue;
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);
+};
 
+function download_issue_files(issue){
+    alert('getting file dict to download');
+    $.get("http://eaeissues.appspot.com/getfilelist/"+issue+"", {}, function(data) {
+        //function(data){returns list of files to download}
+        for (var key in data) {
+            if (dictionary.hasOwnProperty(key)) {
+                var ft = new FileTransfer();
+                var dlPath = DATADIR.fullPath + "/" + key;
+                alert("downloading crap to " + dlPath);
+                ft.download("http://eaeissues.appspot.com/getfile/" + data[key], dlPath, function(e){
+                render_issue(foldername);
+            }
+        }
+    }, "json");
+};
+
+function render_issue(foldername){
+    alert('should render'+foldername)
+};
 
 /*START Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 /*END Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -176,11 +208,14 @@ img {
 
 <script type="text/javascript">
     //$('body').on('tap click', '#file_read_btn', get_FS);
-    $('body').on('tap click', '#download_cfguy', function(){
+    /*$('body').on('tap click', '#download_cfguy', function(){
         download_handler('cfguy.png', 'folder1');
     });
     $('body').on('tap click', '#download_bobapony', function(){
         download_handler('bobapony.jpg', 'folder2');
+    });*/
+    $('body').on('tap click', '#download_issue', function(){
+        download_handler($('#download_issue').val());
     });
 </script>
 
