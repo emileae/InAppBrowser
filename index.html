@@ -111,7 +111,12 @@ function readAsText(file) {
     reader.onloadend = function(evt) {
         alert(evt.target.result);
         $('#photos').html(evt.target.result);
-        $('img').attr('src').prepend(DATADIR.fullPath);
+        var imgs = document.getElementsByTagName("img");
+        for(var i = 0; i < imgs.length; i++){
+           //do something to each div like
+           imgs[i].src = DATADIR.fullPath+'/'+imgs[i].src;
+           alert(imgs[i].src);
+        }
     };
     reader.readAsText(file);
 }
