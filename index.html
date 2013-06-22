@@ -74,7 +74,7 @@ function download_issue_files(issue){
         //function(data){returns list of files to download}
         for (var key in data) {
             alert(key+'_a');
-            if (dictionary.hasOwnProperty(key)) {
+            if (data.hasOwnProperty(key)) {
                 alert(key+'_b');
                 var ft = new FileTransfer();
                 var dlPath = DATADIR.fullPath + "/" + key;
