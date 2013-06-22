@@ -114,8 +114,9 @@ function readAsText(file) {
         
         var imgs = document.getElementsByTagName("img");
         for(var i = 0; i < imgs.length; i++){
+            var file_name = img[i].getAttribute('id');
            //do something to each div like
-           imgs[i].src = DATADIR.fullPath+'/'+'img_1_1.jpg';
+           imgs[i].src = DATADIR.fullPath+'/'+file_name;
            alert(imgs[i].src);
         }
     };
