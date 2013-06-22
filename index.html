@@ -88,23 +88,26 @@ function download_issue_files(issue){
 };
 
 function render_issue(foldername){
-    alert('should render'+foldername);
+    alert('should render '+foldername);
+    alert('dir: '+DATADIR);
     DATADIR.getFile("index.html", {create: true, exclusive: true}, gotFileEntry);
 };
 
 function gotFileEntry(fileEntry) {
+    alert('gotfileentry')
     fileEntry.file(gotFile, onError);
 }
 
 function gotFile(file){
     //readDataUrl(file);
+    alert('gotfile');
     readAsText(file);
 }
 
 function readAsText(file) {
+    alert("Read as text");
     var reader = new FileReader();
     reader.onloadend = function(evt) {
-        alert("Read as text");
         alert(evt.target.result);
         $('#photos').html(evt.target.result);
     };
