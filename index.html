@@ -111,10 +111,11 @@ function readAsText(file) {
     reader.onloadend = function(evt) {
         alert(evt.target.result);
         $('#photos').html(evt.target.result);
+        
         var imgs = document.getElementsByTagName("img");
         for(var i = 0; i < imgs.length; i++){
            //do something to each div like
-           imgs[i].src = DATADIR.fullPath+'/'+imgs[i].src;
+           imgs[i].src = DATADIR.fullPath+'/'+'img_1_1.jpg';
            alert(imgs[i].src);
         }
     };
