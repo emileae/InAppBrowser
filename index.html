@@ -62,7 +62,8 @@ function onError(e){
 }
 
 function onDeviceReady() {
-    $('body').append('download Issue: <button id="download_issue">1</button>');
+    $('body').append('download Issue: <button class="download_issue">1</button>');
+    $('body').append('download Issue: <button class="download_issue">2</button>');
 }
 
 function download_handler(issue){
@@ -154,8 +155,8 @@ img {
     $('body').on('tap click', '#download_bobapony', function(){
         download_handler('bobapony.jpg', 'folder2');
     });*/
-    $('body').on('tap click', '#download_issue', function(){
-        download_handler('1');
+    $('body').on('tap click', '.download_issue', function(){
+        download_handler('2');
     });
 </script>
 
