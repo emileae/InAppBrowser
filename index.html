@@ -111,6 +111,7 @@ function readAsText(file) {
     reader.onloadend = function(evt) {
         alert(evt.target.result);
         $('#photos').html(evt.target.result);
+        $('img').attr('src').prepend(DATADIR.fullPath);
     };
     reader.readAsText(file);
 }
