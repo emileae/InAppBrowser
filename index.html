@@ -89,7 +89,7 @@ function download_issue_files(issue){
 
 function render_issue(foldername){
     alert('should render'+foldername);
-    dirEntry.getFile("index.html", {create: true, exclusive: true}, gotFileEntry);
+    DATADIR.getFile("index.html", {create: true, exclusive: true}, gotFileEntry);
 };
 
 function gotFileEntry(fileEntry) {
