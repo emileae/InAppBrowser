@@ -73,7 +73,9 @@ function download_issue_files(issue){
     $.get("http://eaeissues.appspot.com/getfilelist/"+issue+"", {}, function(data) {
         //function(data){returns list of files to download}
         for (var key in data) {
+            alert(key+'_a');
             if (dictionary.hasOwnProperty(key)) {
+                alert(key+'_b');
                 var ft = new FileTransfer();
                 var dlPath = DATADIR.fullPath + "/" + key;
                 alert("downloading crap to " + dlPath);
