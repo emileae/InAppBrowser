@@ -39,6 +39,8 @@ function gotFileEntries(fileEntries) {
 
     var file_in_dir = false;
     
+    // NBNBNBNBNBNBNBNBN Should make some sort of check that all files that are necessary are downloaded, download may be interrupted
+    
     if(fileEntries.length>0){
         file_in_dir = true;
     }else if (fileEntries.length<=0){
@@ -73,12 +75,10 @@ function download_issue_files(issue){
     $.get("http://eaeissues.appspot.com/getfilelist/"+issue+"", {}, function(data) {
         //function(data){returns list of files to download}
         for (var key in data) {
-            alert(key+'_a');
             if (data.hasOwnProperty(key)) {
-                alert(key+'_b');
                 var ft = new FileTransfer();
                 var dlPath = DATADIR.fullPath + "/" + key;
-                alert("downloading crap to " + dlPath);
+                //alert("downloading crap to " + dlPath);
                 ft.download("http://eaeissues.appspot.com/getfile/" + data[key], dlPath, function(e){
                 render_issue(foldername);
                 })
@@ -88,11 +88,28 @@ function download_issue_files(issue){
 };
 
 function render_issue(foldername){
-    alert('should render'+foldername)
+    alert('should render'+foldername);
+    dirEntry.getFile("index.html", {create: true, exclusive: true}, gotFileEntry);
 };
 
-/*START Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-/*END Later Code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+function gotFileEntry(fileEntry) {
+    fileEntry.file(gotFile, onError);
+}
+
+function gotFile(file){
+    //readDataUrl(file);
+    readAsText(file);
+}
+
+function readAsText(file) {
+    var reader = new FileReader();
+    reader.onloadend = function(evt) {
+        alert("Read as text");
+        alert(evt.target.result);
+        $('#photos').html(evt.target.result);
+    };
+    reader.readAsText(file);
+}
 
 function init() {
     document.addEventListener("deviceready", onDeviceReady, true);
